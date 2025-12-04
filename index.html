@@ -13,65 +13,97 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <!-- Custom Animation CSS -->
-   <style>
+  <style>
     :root {
         --primary: #3b82f6;
         --secondary: #10b981;
         --accent: #8b5cf6;
     }
-    
+
+    /* ================================================================== */
+    /* GLOBAL FIXES – ELIMINATE HORIZONTAL SCROLL & WHITE SPACE */
+    /* ================================================================== */
+    html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;           /* Critical: prevents any horizontal overflow */
+    }
+
+    body {
+        background-color: #0f172a;
+        color: #f8fafc;
+        min-height: 100vh;
+        position: relative;
+        box-sizing: border-box;
+    }
+
     * {
         font-family: 'Inter', sans-serif;
+        box-sizing: border-box;
+    }
+
+    /* Force Tailwind container to respect viewport */
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @media (min-width: 640px) {
+        .container { padding-left: 2rem; padding-right: 2rem; }
+    }
+    @media (min-width: 1024px) {
+        .container { max-width: 1280px; }
     }
 
     /* ================================================================== */
-    /* 1. PUSH HERO SECTION DOWN ON MOBILE ONLY – NEVER HIDDEN UNDER NAVBAR */
+    /* 1. HERO SECTION – SAFE PADDING (never hidden under navbar) */
     /* ================================================================== */
-    /* Default (desktop/tablet) – normal spacing */
     section:first-of-type {
         padding-top: 8rem; /* pt-32 */
     }
 
-    /* Mobile: aggressive push-down so content starts well below navbar */
     @media (max-width: 768px) {
         section:first-of-type {
-            padding-top: 160px !important;   /* ← Ensures full visibility under navbar */
+            padding-top: 150px !important;
         }
     }
 
-    /* Extra safety for small phones / iPhone with notch */
     @media (max-width: 480px) {
-        section:first-of-type {
-            padding-top: 180px !important;
-        }
-    }
-
-    /* Foldables & very small screens */
-    @media (max-width: 540px) and (max-height: 720px) {
         section:first-of-type {
             padding-top: 170px !important;
         }
     }
 
-    /* ================================================================== */
-    /* 2. SMALLER "START TRADING" BUTTON + SMALLER FONT */
-    /* ================================================================== */
-    .btn-start-trading {
-        padding: 0.75rem 1.5rem !important;     /* Smaller padding */
-        font-size: 0.9375rem !important;        /* text-sm → 15px */
-        font-weight: 600 !important;
-        border-radius: 0.75rem !important;      /* rounded-xl */
-    }
-
-    @media (max-width: 640px) {
-        .btn-start-trading {
-            padding: 0.625rem 1.25rem !important;   /* Even smaller on mobile */
-            font-size: 0.875rem !important;         /* text-xs → 14px */
+    @media (max-width: 540px) and (max-height: 720px) {
+        section:first-of-type {
+            padding-top: 160px !important;
         }
     }
 
     /* ================================================================== */
-    /* Your original animations & styles (unchanged) */
+    /* 2. SMALLER "START TRADING" BUTTON */
+    /* ================================================================== */
+    .btn-start-trading {
+        padding: 0.75rem 1.5rem !important;
+        font-size: 0.9375rem !important;
+        font-weight: 600 !important;
+        border-radius: 0.75rem !important;
+    }
+
+    @media (max-width: 640px) {
+        .btn-start-trading {
+            padding: 0.625rem 1.25rem !important;
+            font-size: 0.875rem !important;
+        }
+    }
+
+    /* ================================================================== */
+    /* ANIMATIONS (unchanged) */
     /* ================================================================== */
     @keyframes float {
         0%, 100% { transform: translateY(0px); }
@@ -100,38 +132,88 @@
     .animate-slide-in-right { animation: slideInRight 0.8s ease-out forwards; }
     .animate-slide-in-left { animation: slideInLeft 0.8s ease-out forwards; }
 
+    /* ================================================================== */
+    /* GLASS & UI STYLES */
+    /* ================================================================== */
     .glass {
-        background: rgba(255,255,255,0.05);
+        background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
     }
 
-    ::-webkit-scrollbar { width:8px; height:8px; }
-    ::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); }
-    ::-webkit-scrollbar-thumb { background:rgba(59,130,246,0.5); border-radius:4px; }
-    ::-webkit-scrollbar-thumb:hover { background:rgba(59,130,246,0.8); }
-
     .gradient-text {
-        background: linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
     }
 
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.5); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(59,130,246,0.8); }
+
+    /* ================================================================== */
+    /* WHATSAPP FLOAT BUTTON – NOW 100% SAFE (no overflow) */
+    /* ================================================================== */
+    .whatsapp-float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        right: 16px;                    /* Pulled in safely */
+        background-color: #25d366;
+        color: white;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 32px;
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        animation: pulse-glow 2s infinite;
+        pointer-events: auto;
+    }
+
+    .whatsapp-float:hover {
+        transform: scale(1.1);
+        background-color: #20c05a;
+        box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+    }
+
+    @media (max-width: 480px) {
+        .whatsapp-float {
+            width: 54px;
+            height: 54px;
+            font-size: 28px;
+            bottom: 16px;
+            right: 12px;
+        }
+    }
+
+    /* ================================================================== */
+    /* FOLDABLE OPTIMIZATIONS */
+    /* ================================================================== */
     @media (max-width:540px) and (max-height:720px) {
         .foldable-optimized { padding-top:1rem !important; padding-bottom:1rem !important; }
         .foldable-text { font-size:0.9rem !important; }
     }
 
-    body {
-        background-color:#0f172a;
-        color:#f8fafc;
-        overflow-x:hidden;
+    /* ================================================================== */
+    /* FINAL SAFETY NET – PREVENT ANY ELEMENT FROM BREAKING LAYOUT */
+    /* ================================================================== */
+    img, svg, video, canvas, iframe, 
+    .glass, .container, section, nav, header, footer, div {
+        max-width: 100% !important;
+        overflow: hidden;
     }
 </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950">
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950 overflow-x-hidden">
     
     <!-- Navigation -->
     <nav class="glass fixed top-0 left-0 right-0 z-50 py-4 px-6">
