@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Profile | CryptoFutures Pro</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+ <style>
+    :root {
+        --primary: #3b82f6;
+        --secondary: #10b981;
+        --accent: #8b5cf6;
+    }
+    
+    * {
+        font-family: 'Inter', sans-serif;
+        box-sizing: border-box;
+    }
+    
+    /* ================================================================== */
+    /*  MOBILE-ONLY FIX: PUSH PROFILE HEADER BELOW FIXED NAVBAR          */
+    /* ================================================================== */
+    @media (max-width: 1024px) {
+        /* All pages that have a fixed top navbar (height ~80–90px on mobile) */
+        main {
+            padding-top: 110px !important; /* ← pushes everything down safely */
+        }
+        
+        /* Extra safety for very small screens / iPhone with notch */
+        @media (max-height: 700px) {
+            main {
+                padding-top: 130px !important;
+            }
+        }
+    }
+
+    /* If you ever want to be even more precise only on this profile page */
+    @media (max-width: 1024px) {
+        .profile-header-mobile-fix {
+            margin-top: 2rem !important;
+        }
+    }
+
+    /* ================================================================== */
+    /* Your original animations & glass styles (unchanged)                */
+    /* ================================================================== */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInLeft { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideInRight { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes pulse-subtle { 0%,100% {opacity:1} 50%{opacity:0.8} }
+
+    }
+
+    .animate-fade-in       { animation: fadeIn 0.5s ease-out forwards; }
+    .animate-slide-in-left { animation: slideInLeft 0.4s ease-out forwards; }
+    .animate-slide-in-right{ animation: slideInRight 0.4s ease-out forwards; }
+    .animate-pulse-subtle  { animation: pulse-subtle 2s ease-in-out infinite; }
+
+    .glass {
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .glass-dark {
+        background: rgba(15,23,42,0.8);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .custom-scrollbar { scrollbar-width: thin; scrollbar-color: rgba(59,130,246,0.5) rgba(255,255,255,0.05); }
+    .custom-scrollbar::-webkit-scrollbar { width:6px; height:6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); border-radius:3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background:rgba(59,130,246,0.5); border-radius:3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background:rgba(59,130,246,0.8); }
+
+    .gradient-text {
+        background: linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);
+        -webkit-background-clip:text;
+        background-clip:text;
+        color:transparent;
+    }
+
+    body {
+        background-color:#0f172a;
+        color:#f8fafc;
+        overflow-x:hidden;
+    }
+
+    /* Trading buttons */
+    .trading-btn {
+        padding:0.5rem 1.5rem;
+        border-radius:0.5rem;
+        font-weight:500;
+        transition:all 0.2s;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+    }
+    .trading-btn-primary  { background:linear-gradient(135deg,#3b82f6,#1d4ed8); color:white; }
+    .trading-btn-primary:hover { background:linear-gradient(135deg,#1d4ed8,#1e40af); transform:translateY(-2px); box-shadow:0 10px 25px rgba(59,130,246,0.3); }
+    .trading-btn-secondary { background:rgba(255,255,255,0.05); color:#f8fafc; border:1px solid rgba(255,255,255,0.1); }
+    .trading-btn-secondary:hover { background:rgba(255,255,255,0.1); transform:translateY(-2px); }
+
+    /* Badges */
+    .badge { display:inline-flex; align-items:center; padding:0.25rem 0.75rem; border-radius:9999px; font-size:0.75rem; font-weight:600; }
+    .badge-success { background:rgba(16,185,129,0.1); color:#10b981; }
+    .badge-warning { background:rgba(245,158,11,0.1); color:#f59e0b; }
+    .badge-danger  { background:rgba(239,68,68,0.1); color:#ef4444; }
+    .badge-info    { background:rgba(59,130,246,0.1); color:#3b82f6; }
+    .badge-premium { background:linear-gradient(135deg,#f59e0b,#d97706); color:white; }
+
+    /* Tabs */
+    .tab-btn {
+        padding:0.75rem 1.5rem;
+        border-radius:0.5rem;
+        font-weight:500;
+        transition:all 0.2s;
+        background:transparent;
+        color:#9ca3af;
+    }
+    .tab-btn:hover { background:rgba(255,255,255,0.05); color:#f8fafc; }
+    .tab-btn.active { background:rgba(59,130,246,0.1); color:#3b82f6; border-bottom:2px solid #3b82f6; }
+
+    /* Form styles */
+    .form-input {
+        background:rgba(255,255,255,0.05);
+        border:1px solid rgba(255,255,255,0.1);
+        color:#f8fafc;
+        border-radius:0.5rem;
+        padding:0.75rem 1rem;
+        width:100%;
+        transition:all 0.2s;
+    }
+    .form-input:focus { outline:none; border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,0.1); }
+    .form-label { display:block; font-size:0.875rem; font-weight:500; color:#d1d5db; margin-bottom:0.5rem; }
+
+    /* Progress bars */
+    .progress-bar { height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,#3b82f6,#8b5cf6); border-radius:3px; transition:width .3s ease; }
+
+    /* Avatar upload */
+    .avatar-upload { position:relative; width:128px; height:128px; }
+    .avatar-image { width:100%; height:100%; border-radius:50%; object-fit:cover; border:3px solid rgba(59,130,246,0.3); }
+    .avatar-upload-btn { position:absolute; bottom:0; right:0; width:36px; height:36px; background:#3b82f6; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; cursor:pointer; transition:all .2s; }
+    .avatar-upload-btn:hover { background:#2563eb; transform:scale(1.1); }
+
+    /* Stats cards & toggle switch (unchanged) */
+    .stat-card { padding:1.5rem; border-radius:1rem; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); transition:all .2s; }
+    .stat-card:hover { background:rgba(255,255,255,0.05); transform:translateY(-2px); }
+
+    .toggle-switch { position:relative; display:inline-block; width:48px; height:24px; }
+    .toggle-switch input { opacity:0; width:0; height:0; }
+    .toggle-slider { position:absolute; cursor:pointer; top:0;left:0;right:0;bottom:0; background:#374151; transition:.4s; border-radius:24px; }
+    .toggle-slider:before { position:absolute; content:""; height:16px; width:16px; left:4px; bottom:4px; background:white; transition:.4s; border-radius:50%; }
+    input:checked + .toggle-slider { background:#3b82f6; }
+    input:checked + .toggle-slider:before { transform:translateX(24px); }
+
+    /* Timeline & responsive */
+    .timeline-item { position:relative; padding-left:2rem; margin-bottom:1.5rem; }
+    .timeline-item:before { content:''; position:absolute; left:0.5rem; top:0.25rem; width:12px; height:12px; border-radius:50%; background:#3b82f6; }
+    .timeline-item:after { content:''; position:absolute; left:0.75rem; top:1.25rem; bottom:-1.5rem; width:2px; background:rgba(255,255,255,0.1); }
+    .timeline-item:last-child:after { display:none; }
+
+    @media (max-width:640px) {
+        .mobile-full { width:100% !important; }
+        .mobile-hidden { display:none !important; }
+        .mobile-stack { flex-direction:column !important; }
+        .mobile-text-center { text-align:center !important; }
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+        position:absolute;
+        top:0;left:0;right:0;bottom:0;
+        background:rgba(15,23,42,0.8);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:20;
+        border-radius:0.75rem;
+    }
+
+    /* ────────────────────────────────
+       MOBILE SIDEBAR FIXES (you already had these – kept)
+       ──────────────────────────────── */
+    nav.glass { z-index:50; }
+    #mobile-sidebar { z-index:60 !important; }
+    #mobile-sidebar .glass-dark { padding-top:100px !important; position:relative; }
+    #mobile-sidebar .border-b.border-gray-800 {
+        position:absolute;
+        top:0; left:0; right:0;
+        height:90px;
+        background:rgba(15,23,42,0.95);
+        backdrop-filter:blur(10px);
+        z-index:10;
+        display:flex;
+        align-items:center;
+        padding:0 1.5rem;
+        justify-content:space-between;
+    }
+    #close-sidebar { position:absolute; top:50%; right:1.5rem; transform:translateY(-50%); z-index:11;  }
+    #mobile-sidebar .p-6 { padding:0 !important; }
+    @media (max-width:1024px) {
+        #mobile-sidebar .glass-dark { padding-top:110px !important; }
+    }
+</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950">
+    
+    <!-- Top Navigation Bar -->
+    <nav class="glass fixed top-0 left-0 right-0 z-50 py-3 px-4 md:px-6 border-b border-gray-800">
+        <div class="flex items-center justify-between">
+            <!-- Left: Logo & Menu -->
+            <div class="flex items-center space-x-4">
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="lg:hidden text-gray-300 hover:text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                
+                <!-- Logo -->
+                <a href="dashboard.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-lg"></i>
+                    </div>
+                    <span class="text-xl font-bold gradient-text hidden sm:inline">CryptoFutures<span class="text-blue-400">Pro</span></span>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-6 ml-6">
+                    <a href="dashboard.html" class="text-gray-300 hover:text-white transition-colors flex items-center">
+                        <i class="fas fa-home mr-2"></i> Dashboard
+                    </a>
+                    <a href="balances.html" class="text-gray-300 hover:text-white transition-colors flex items-center">
+                        <i class="fas fa-wallet mr-2"></i> Balances
+                    </a>
+                    <a href="coins.html" class="text-gray-300 hover:text-white transition-colors flex items-center">
+                        <i class="fas fa-coins mr-2"></i> Markets
+                    </a>
+                    <a href="futures_chart.html" class="text-gray-300 hover:text-white transition-colors flex items-center">
+                        <i class="fas fa-chart-candlestick mr-2"></i> Futures
+                    </a>
+                    <a href="chart.html" class="text-gray-300 hover:text-white transition-colors flex items-center">
+                        <i class="fas fa-chart-line mr-2"></i> Charts
+                    </a>
+                    <a href="profile.html" class="text-blue-400 font-semibold flex items-center">
+                        <i class="fas fa-user mr-2"></i> Profile
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Right: User & Settings -->
+            <div class="flex items-center space-x-3">
+                <!-- Notification -->
+                <button class="relative w-10 h-10 rounded-xl bg-gray-800/50 hover:bg-gray-800 text-gray-300 hover:text-white transition-colors">
+                    <i class="fas fa-bell"></i>
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                
+                <!-- User Profile -->
+                <div class="relative">
+                    <a href="profile.html" class="flex items-center space-x-3 glass rounded-xl px-3 py-2 hover:bg-gray-800/50 transition-colors">
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                            <span class="font-bold">DT</span>
+                        </div>
+                        <div class="hidden md:block text-left">
+                            <div class="font-medium text-sm">Demo Trader</div>
+                            <div class="text-xs text-gray-400">Professional</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Title -->
+        <div class="mt-3 lg:hidden">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="font-bold text-lg">Profile Settings</div>
+                    <div class="text-sm text-gray-400">Manage your account</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Sidebar Menu -->
+    <div id="mobile-sidebar" class="fixed inset-0 z-40 lg:hidden hidden">
+        <div class="absolute inset-0 bg-black/50" id="sidebar-backdrop"></div>
+        <div class="absolute left-0 top-0 bottom-0 w-64 glass-dark border-r border-gray-800 transform -translate-x-full transition-transform duration-300" id="sidebar-content">
+            
+            <div class="p-6 border-b border-gray-800">
+                
+                
+                <div class="flex items-center justify-between">
+                    
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-chart-line text-white text-lg"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">CryptoFutures<span class="text-blue-400">Pro</span></span>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="space-y-1">
+                    <a href="dashboard.html" class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-gray-800/50 transition-colors">
+                        <i class="fas fa-home w-5"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="balances.html" class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-gray-800/50 transition-colors">
+                        <i class="fas fa-wallet w-5"></i>
+                        <span>Balances</span>
+                    </a>
+                    <a href="coins.html" class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-gray-800/50 transition-colors">
+                        <i class="fas fa-coins w-5"></i>
+                        <span>Markets</span>
+                    </a>
+                    <a href="futures_chart.html" class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-gray-800/50 transition-colors">
+                        <i class="fas fa-chart-candlestick w-5"></i>
+                        <span>Futures</span>
+                    </a>
+                    <a href="chart.html" class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-gray-800/50 transition-colors">
+                        <i class="fas fa-chart-line w-5"></i>
+                        <span>Charts</span>
+                    </a>
+                    <a href="profile.html" class="flex items-center space-x-3 px-3 py-3 rounded-xl bg-blue-500/10 text-blue-400">
+                        <i class="fas fa-user w-5"></i>
+                        <span>Profile</span>
+                    </a>
+                    <div class="pt-4 border-t border-gray-800 mt-4">
+                        <a href="settings.html" class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-gray-800/50 transition-colors">
+                            <i class="fas fa-cog w-5"></i>
+                            <span>Settings</span>
+                        </a>
+                        <a href="api_keys.html" class="flex items-center space-x-3 px-3 py-3 rounded-xl hover:bg-gray-800/50 transition-colors">
+                            <i class="fas fa-key w-5"></i>
+                            <span>API Keys</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="pt-24 pb-16 px-4 md:px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Page Header -->
+            <!-- Page Header -->
+<div class="mb-8 animate-fade-in profile-header-mobile-fix">
+                <div class="flex flex-col md:flex-row md:items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-bold mb-2">Profile Settings</h1>
+                        <div class="flex items-center space-x-4 text-gray-400">
+                            <div class="flex items-center">
+                                <i class="fas fa-user-check text-green-400 mr-2"></i>
+                                <span class="text-sm">Verified Account</span>
+                            </div>
+                            <span class="hidden md:inline">•</span>
+                            <div class="text-sm">Member since: Jan 2023</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3 mt-4 md:mt-0">
+                        <span class="badge badge-premium">
+                            <i class="fas fa-crown mr-1"></i> Professional Plan
+                        </span>
+                        <button id="export-data" class="trading-btn trading-btn-secondary">
+                            <i class="fas fa-download mr-2"></i> Export Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Left Column: Profile Card & Stats -->
+                <div class="lg:col-span-1 space-y-8">
+                    <!-- Profile Card -->
+                    <div class="glass rounded-2xl p-6 animate-slide-in-left">
+                        <div class="flex flex-col items-center text-center">
+                            <!-- Avatar -->
+                            <div class="avatar-upload mb-6">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&h=256&q=80" 
+                                     alt="Profile" 
+                                     class="avatar-image"
+                                     id="profile-avatar">
+                                <div class="avatar-upload-btn" id="change-avatar-btn">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <input type="file" id="avatar-input" accept="image/*" class="hidden">
+                            </div>
+                            
+                            <!-- User Info -->
+                            <h2 class="text-xl font-bold mb-1">Demo Trader</h2>
+                            <div class="text-gray-400 mb-4">demo@cryptofuturespro.com</div>
+                            
+                            <!-- Account Level -->
+                            <div class="mb-6">
+                                <div class="text-sm text-gray-400 mb-2">Account Level</div>
+                                <div class="flex items-center justify-center space-x-2">
+                                    <i class="fas fa-shield-alt text-blue-400"></i>
+                                    <span class="font-medium">Professional</span>
+                                </div>
+                                <div class="progress-bar w-32 mx-auto mt-2">
+                                    <div class="progress-fill" style="width: 75%"></div>
+                                </div>
+                                <div class="text-xs text-gray-400 mt-2">75% complete</div>
+                            </div>
+                            
+                            <!-- Quick Stats -->
+                            <div class="grid grid-cols-2 gap-4 w-full mb-6">
+                                <div class="stat-card text-center">
+                                    <div class="text-2xl font-bold text-green-400">124</div>
+                                    <div class="text-xs text-gray-400">Total Trades</div>
+                                </div>
+                                <div class="stat-card text-center">
+                                    <div class="text-2xl font-bold">42.5%</div>
+                                    <div class="text-xs text-gray-400">Win Rate</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Profile Completion -->
+                            <div class="w-full mb-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="text-sm text-gray-400">Profile Complete</div>
+                                    <div class="text-sm font-bold text-green-400">85%</div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                                <div class="text-xs text-gray-400 mt-2">Complete profile for better insights</div>
+                            </div>
+                            
+                            <!-- Quick Actions -->
+                            <div class="w-full space-y-3">
+                                <a href="settings.html" class="trading-btn trading-btn-secondary w-full">
+                                    <i class="fas fa-cog mr-2"></i> Settings
+                                </a>
+                                <a href="api_keys.html" class="trading-btn trading-btn-secondary w-full">
+                                    <i class="fas fa-key mr-2"></i> API Keys
+                                </a>
+                                <button id="logout-btn" class="trading-btn trading-btn-secondary w-full" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Verification Status -->
+                    <div class="glass rounded-2xl p-6 animate-slide-in-left" style="animation-delay: 0.1s">
+                        <h3 class="text-lg font-bold mb-4">Verification Status</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-check text-green-400 text-xs"></i>
+                                    </div>
+                                    <span>Email Verified</span>
+                                </div>
+                                <span class="text-green-400 text-sm">Verified</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-check text-green-400 text-xs"></i>
+                                    </div>
+                                    <span>Phone Verified</span>
+                                </div>
+                                <span class="text-green-400 text-sm">Verified</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-6 h-6 bg-yellow-500/20 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-clock text-yellow-400 text-xs"></i>
+                                    </div>
+                                    <span>KYC Level 2</span>
+                                </div>
+                                <span class="text-yellow-400 text-sm">Pending</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-6 h-6 bg-gray-500/20 rounded-full flex items-center justify-center mr-3">
+                                        <i class="fas fa-times text-gray-400 text-xs"></i>
+                                    </div>
+                                    <span>Advanced Trading</span>
+                                </div>
+                                <span class="text-gray-400 text-sm">Not Applied</span>
+                            </div>
+                        </div>
+                        <button class="trading-btn trading-btn-secondary w-full mt-6">
+                            <i class="fas fa-shield-alt mr-2"></i> Upgrade Verification
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Main Content -->
+                <div class="lg:col-span-3 space-y-8">
+                    <!-- Tabs Navigation -->
+                    <div class="glass rounded-2xl p-4 animate-slide-in-right">
+                        <div class="flex overflow-x-auto custom-scrollbar space-x-2">
+                            <button class="tab-btn active" data-tab="personal">
+                                <i class="fas fa-user mr-2"></i> Personal Info
+                            </button>
+                            <button class="tab-btn" data-tab="security">
+                                <i class="fas fa-shield-alt mr-2"></i> Security
+                            </button>
+                            <button class="tab-btn" data-tab="preferences">
+                                <i class="fas fa-sliders-h mr-2"></i> Preferences
+                            </button>
+                            <button class="tab-btn" data-tab="notifications">
+                                <i class="fas fa-bell mr-2"></i> Notifications
+                            </button>
+                            <button class="tab-btn" data-tab="billing">
+                                <i class="fas fa-credit-card mr-2"></i> Billing
+                            </button>
+                            <button class="tab-btn" data-tab="activity">
+                                <i class="fas fa-history mr-2"></i> Activity
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab Contents -->
+                    <div class="space-y-8">
+                        <!-- Personal Info Tab -->
+                        <div id="personal-tab" class="tab-content">
+                            <div class="glass rounded-2xl p-6 animate-fade-in">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-xl font-bold">Personal Information</h3>
+                                    <button class="trading-btn trading-btn-secondary" id="edit-personal-btn">
+                                        <i class="fas fa-edit mr-2"></i> Edit
+                                    </button>
+                                </div>
+                                
+                                <form id="personal-form" class="space-y-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label class="form-label" for="first-name">First Name</label>
+                                            <input type="text" id="first-name" class="form-input" value="Demo" readonly>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="last-name">Last Name</label>
+                                            <input type="text" id="last-name" class="form-input" value="Trader" readonly>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="email">Email Address</label>
+                                            <input type="email" id="email" class="form-input" value="demo@cryptofuturespro.com" readonly>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="phone">Phone Number</label>
+                                            <input type="tel" id="phone" class="form-input" value="+1 (555) 123-4567" readonly>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label class="form-label" for="country">Country</label>
+                                            <select id="country" class="form-input" disabled>
+                                                <option value="US" selected>United States</option>
+                                                <option value="UK">United Kingdom</option>
+                                                <option value="CA">Canada</option>
+                                                <option value="AU">Australia</option>
+                                            </select>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label class="form-label" for="timezone">Timezone</label>
+                                            <select id="timezone" class="form-input" disabled>
+                                                <option value="UTC-5" selected>Eastern Time (UTC-5)</option>
+                                                <option value="UTC-8">Pacific Time (UTC-8)</option>
+                                                <option value="UTC+0">GMT (UTC+0)</option>
+                                                <option value="UTC+8">Singapore (UTC+8)</option>
+                                            </select>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label class="form-label" for="bio">Bio</label>
+                                            <textarea id="bio" class="form-input" rows="3" readonly>Professional crypto trader with focus on futures and derivatives. Specializing in BTC, ETH, and SOL markets.</textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="pt-6 border-t border-gray-800 flex justify-end space-x-3 hidden" id="personal-form-actions">
+                                        <button type="button" class="trading-btn trading-btn-secondary" id="cancel-personal-btn">
+                                            Cancel
+                                        </button>
+                                        <button type="submit" class="trading-btn trading-btn-primary">
+                                            Save Changes
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <!-- Trading Profile -->
+                            <div class="glass rounded-2xl p-6 animate-fade-in" style="animation-delay: 0.1s">
+                                <h3 class="text-xl font-bold mb-6">Trading Profile</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <div class="text-sm text-gray-400 mb-2">Trading Experience</div>
+                                        <div class="text-lg font-bold">3+ Years</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-400 mb-2">Primary Market</div>
+                                        <div class="text-lg font-bold">Futures & Derivatives</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-400 mb-2">Risk Tolerance</div>
+                                        <div class="text-lg font-bold">Medium-High</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm text-gray-400 mb-2">Trading Style</div>
+                                        <div class="text-lg font-bold">Swing Trading</div>
+                                    </div>
+                                </div>
+                                <div class="mt-6">
+                                    <button class="trading-btn trading-btn-secondary">
+                                        <i class="fas fa-chart-line mr-2"></i> Update Trading Profile
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Security Tab -->
+                        <div id="security-tab" class="tab-content hidden">
+                            <div class="glass rounded-2xl p-6 animate-fade-in">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-xl font-bold">Security Settings</h3>
+                                    <span class="badge badge-success">
+                                        <i class="fas fa-shield-alt mr-1"></i> Secure
+                                    </span>
+                                </div>
+                                
+                                <div class="space-y-6">
+                                    <!-- Password -->
+                                    <div class="bg-gray-900/30 rounded-xl p-5">
+                                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                            <div>
+                                                <div class="font-bold">Password</div>
+                                                <div class="text-sm text-gray-400">Last changed 30 days ago</div>
+                                            </div>
+                                            <button class="trading-btn trading-btn-secondary mt-3 md:mt-0" id="change-password-btn">
+                                                <i class="fas fa-key mr-2"></i> Change Password
+                                            </button>
+                                        </div>
+                                        
+                                        <form id="password-form" class="space-y-4 hidden">
+                                            <div>
+                                                <label class="form-label" for="current-password">Current Password</label>
+                                                <input type="password" id="current-password" class="form-input">
+                                            </div>
+                                            <div>
+                                                <label class="form-label" for="new-password">New Password</label>
+                                                <input type="password" id="new-password" class="form-input">
+                                            </div>
+                                            <div>
+                                                <label class="form-label" for="confirm-password">Confirm New Password</label>
+                                                <input type="password" id="confirm-password" class="form-input">
+                                            </div>
+                                            <div class="flex space-x-3">
+                                                <button type="button" class="trading-btn trading-btn-secondary" id="cancel-password-btn">
+                                                    Cancel
+                                                </button>
+                                                <button type="submit" class="trading-btn trading-btn-primary">
+                                                    Update Password
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <!-- Two-Factor Authentication -->
+                                    <div class="bg-gray-900/30 rounded-xl p-5">
+                                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                            <div>
+                                                <div class="font-bold">Two-Factor Authentication</div>
+                                                <div class="text-sm text-gray-400">Add an extra layer of security</div>
+                                            </div>
+                                            <div class="flex items-center space-x-3 mt-3 md:mt-0">
+                                                <span class="text-green-400 text-sm font-medium">Enabled</span>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" checked id="2fa-toggle">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                            <div class="flex items-center p-3 bg-gray-900/50 rounded-lg">
+                                                <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mr-3">
+                                                    <i class="fas fa-mobile-alt text-blue-400"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="font-medium">Authenticator App</div>
+                                                    <div class="text-sm text-gray-400">Google Authenticator</div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center p-3 bg-gray-900/50 rounded-lg">
+                                                <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center mr-3">
+                                                    <i class="fas fa-sms text-green-400"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="font-medium">SMS Authentication</div>
+                                                    <div class="text-sm text-gray-400">+1 (555) 123-4567</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Active Sessions -->
+                                    <div class="bg-gray-900/30 rounded-xl p-5">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div>
+                                                <div class="font-bold">Active Sessions</div>
+                                                <div class="text-sm text-gray-400">Manage your logged-in devices</div>
+                                            </div>
+                                            <button class="trading-btn trading-btn-secondary" id="logout-all-btn">
+                                                <i class="fas fa-sign-out-alt mr-2"></i> Logout All
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="space-y-4">
+                                            <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+                                                <div class="flex items-center">
+                                                    <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mr-3">
+                                                        <i class="fab fa-chrome text-blue-400"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="font-medium">Chrome on Windows</div>
+                                                        <div class="text-sm text-gray-400">New York, USA • Current Session</div>
+                                                    </div>
+                                                </div>
+                                                <span class="text-green-400 text-sm font-medium">Active</span>
+                                            </div>
+                                            
+                                            <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+                                                <div class="flex items-center">
+                                                    <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mr-3">
+                                                        <i class="fas fa-mobile-alt text-purple-400"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="font-medium">Safari on iPhone</div>
+                                                        <div class="text-sm text-gray-400">Last active 2 hours ago</div>
+                                                    </div>
+                                                </div>
+                                                <button class="text-red-400 hover:text-red-300 text-sm font-medium">
+                                                    <i class="fas fa-times mr-1"></i> Revoke
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+                                                <div class="flex items-center">
+                                                    <div class="w-10 h-10 bg-gray-500/20 rounded-lg flex items-center justify-center mr-3">
+                                                        <i class="fas fa-desktop text-gray-400"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="font-medium">Firefox on MacOS</div>
+                                                        <div class="text-sm text-gray-400">Last active 3 days ago</div>
+                                                    </div>
+                                                </div>
+                                                <button class="text-red-400 hover:text-red-300 text-sm font-medium">
+                                                    <i class="fas fa-times mr-1"></i> Revoke
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Preferences Tab -->
+                        <div id="preferences-tab" class="tab-content hidden">
+                            <div class="glass rounded-2xl p-6 animate-fade-in">
+                                <h3 class="text-xl font-bold mb-6">Preferences</h3>
+                                
+                                <div class="space-y-6">
+                                    <!-- Theme -->
+                                    <div class="flex items-center justify-between p-5 bg-gray-900/30 rounded-xl">
+                                        <div>
+                                            <div class="font-bold">Theme</div>
+                                            <div class="text-sm text-gray-400">Choose your preferred theme</div>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="trading-btn trading-btn-secondary active">
+                                                <i class="fas fa-moon mr-2"></i> Dark
+                                            </button>
+                                            <button class="trading-btn trading-btn-secondary">
+                                                <i class="fas fa-sun mr-2"></i> Light
+                                            </button>
+                                            <button class="trading-btn trading-btn-secondary">
+                                                <i class="fas fa-adjust mr-2"></i> Auto
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Language -->
+                                    <div class="flex items-center justify-between p-5 bg-gray-900/30 rounded-xl">
+                                        <div>
+                                            <div class="font-bold">Language</div>
+                                            <div class="text-sm text-gray-400">Interface language</div>
+                                        </div>
+                                        <select class="form-input w-48">
+                                            <option selected>English</option>
+                                            <option>Spanish</option>
+                                            <option>French</option>
+                                            <option>German</option>
+                                            <option>Chinese</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Trading Preferences -->
+                                    <div class="p-5 bg-gray-900/30 rounded-xl">
+                                        <div class="font-bold mb-4">Trading Preferences</div>
+                                        <div class="space-y-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Default Chart Type</div>
+                                                    <div class="text-sm text-gray-400">Preferred chart view</div>
+                                                </div>
+                                                <select class="form-input w-48">
+                                                    <option selected>Candlestick</option>
+                                                    <option>Line</option>
+                                                    <option>Area</option>
+                                                    <option>Heikin-Ashi</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Default Timeframe</div>
+                                                    <div class="text-sm text-gray-400">Default chart timeframe</div>
+                                                </div>
+                                                <select class="form-input w-48">
+                                                    <option>1 Minute</option>
+                                                    <option>5 Minutes</option>
+                                                    <option>15 Minutes</option>
+                                                    <option selected>1 Hour</option>
+                                                    <option>4 Hours</option>
+                                                    <option>1 Day</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Price Alerts</div>
+                                                    <div class="text-sm text-gray-400">Receive price alerts</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Privacy Settings -->
+                                    <div class="p-5 bg-gray-900/30 rounded-xl">
+                                        <div class="font-bold mb-4">Privacy Settings</div>
+                                        <div class="space-y-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Show Trading Stats</div>
+                                                    <div class="text-sm text-gray-400">Display your stats publicly</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Allow Messages</div>
+                                                    <div class="text-sm text-gray-400">Receive messages from other traders</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Email Marketing</div>
+                                                    <div class="text-sm text-gray-400">Receive promotional emails</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Save Button -->
+                                    <div class="flex justify-end">
+                                        <button class="trading-btn trading-btn-primary">
+                                            <i class="fas fa-save mr-2"></i> Save Preferences
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Notifications Tab -->
+                        <div id="notifications-tab" class="tab-content hidden">
+                            <div class="glass rounded-2xl p-6 animate-fade-in">
+                                <h3 class="text-xl font-bold mb-6">Notification Settings</h3>
+                                
+                                <div class="space-y-6">
+                                    <!-- Email Notifications -->
+                                    <div class="p-5 bg-gray-900/30 rounded-xl">
+                                        <div class="font-bold mb-4">Email Notifications</div>
+                                        <div class="space-y-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Trade Confirmations</div>
+                                                    <div class="text-sm text-gray-400">Receive email for each trade</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Price Alerts</div>
+                                                    <div class="text-sm text-gray-400">Price target reached alerts</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-switch"></span>
+                                                </label>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Security Alerts</div>
+                                                    <div class="text-sm text-gray-400">Login attempts and security events</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Weekly Reports</div>
+                                                    <div class="text-sm text-gray-400">Weekly trading performance reports</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Push Notifications -->
+                                    <div class="p-5 bg-gray-900/30 rounded-xl">
+                                        <div class="font-bold mb-4">Push Notifications</div>
+                                        <div class="space-y-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Trade Executions</div>
+                                                    <div class="text-sm text-gray-400">Real-time trade notifications</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Market News</div>
+                                                    <div class="text-sm text-gray-400">Breaking market news</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox">
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Funding Rate Updates</div>
+                                                    <div class="text-sm text-gray-400">Futures funding rate changes</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <div class="font-medium">Liquidation Warnings</div>
+                                                    <div class="text-sm text-gray-400">Position liquidation warnings</div>
+                                                </div>
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" checked>
+                                                    <span class="toggle-slider"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SMS Notifications -->
+                                    <div class="p-5 bg-gray-900/30 rounded-xl">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div>
+                                                <div class="font-bold">SMS Notifications</div>
+                                                <div class="text-sm text-gray-400">+1 (555) 123-4567</div>
+                                            </div>
+                                            <label class="toggle-switch">
+                                                <input type="checkbox" id="sms-toggle">
+                                                <span class="toggle-slider"></span>
+                                            </label>
+                                        </div>
+                                        <div class="text-sm text-gray-400">
+                                            Receive critical alerts via SMS. Standard messaging rates may apply.
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Save Button -->
+                                    <div class="flex justify-end">
+                                        <button class="trading-btn trading-btn-primary">
+                                            <i class="fas fa-save mr-2"></i> Save Notification Settings
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Billing Tab -->
+                        <div id="billing-tab" class="tab-content hidden">
+                            <div class="glass rounded-2xl p-6 animate-fade-in">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-xl font-bold">Billing & Subscription</h3>
+                                    <span class="badge badge-premium">
+                                        <i class="fas fa-crown mr-1"></i> Professional Plan
+                                    </span>
+                                </div>
+                                
+                                <div class="space-y-6">
+                                    <!-- Current Plan -->
+                                    <div class="p-5 bg-gray-900/30 rounded-xl">
+                                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                            <div>
+                                                <div class="font-bold text-lg">Professional Plan</div>
+                                                <div class="text-sm text-gray-400">$49.99/month • Next billing: Feb 15, 2024</div>
+                                            </div>
+                                            <button class="trading-btn trading-btn-secondary mt-3 md:mt-0">
+                                                <i class="fas fa-sync-alt mr-2"></i> Change Plan
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                                            <div class="text-center p-4 bg-gray-900/50 rounded-lg">
+                                                <div class="text-2xl font-bold text-green-400">Unlimited</div>
+                                                <div class="text-sm text-gray-400">API Calls</div>
+                                            </div>
+                                            <div class="text-center p-4 bg-gray-900/50 rounded-lg">
+                                                <div class="text-2xl font-bold">50+</div>
+                                                <div class="text-sm text-gray-400">Indicators</div>
+                                            </div>
+                                            <div class="text-center p-4 bg-gray-900/50 rounded-lg">
+                                                <div class="text-2xl font-bold">Priority</div>
+                                                <div class="text-sm text-gray-400">Support</div>
+                                            </div>
+                                            <div class="text-center p-4 bg-gray-900/50 rounded-lg">
+                                                <div class="text-2xl font-bold">Advanced</div>
+                                                <div class="text-sm text-gray-400">Analytics</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Payment Method -->
+                                    <div class="p-5 bg-gray-900/30 rounded-xl">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div class="font-bold">Payment Method</div>
+                                            <button class="trading-btn trading-btn-secondary">
+                                                <i class="fas fa-plus mr-2"></i> Add New
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="space-y-4">
+                                            <div class="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg">
+                                                <div class="flex items-center">
+                                                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mr-4">
+                                                        <i class="fab fa-cc-visa text-blue-400 text-xl"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="font-medium">Visa •••• 4242</div>
+                                                        <div class="text-sm text-gray-400">Expires 12/2025 • Primary</div>
+                                                    </div>
+                                                </div>
+                                                <button class="text-blue-400 hover:text-blue-300">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg">
+                                                <div class="flex items-center">
+                                                    <div class="w-12 h-12 bg-gray-500/20 rounded-lg flex items-center justify-center mr-4">
+                                                        <i class="fab fa-paypal text-gray-400 text-xl"></i>
+                                                    </div>
+                                                    <div>
+                                                        <div class="font-medium">PayPal</div>
+                                                        <div class="text-sm text-gray-400">demo@cryptofuturespro.com</div>
+                                                    </div>
+                                                </div>
+                                                <button class="text-red-400 hover:text-red-300">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Billing History -->
+                                    <div class="p-5 bg-gray-900/30 rounded-xl">
+                                        <div class="flex items-center justify-between mb-4">
+                                            <div class="font-bold">Billing History</div>
+                                            <button class="trading-btn trading-btn-secondary">
+                                                <i class="fas fa-download mr-2"></i> Export All
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="overflow-x-auto">
+                                            <table class="w-full">
+                                                <thead>
+                                                    <tr class="text-left text-gray-400 border-b border-gray-800">
+                                                        <th class="pb-3 font-medium">Date</th>
+                                                        <th class="pb-3 font-medium">Description</th>
+                                                        <th class="pb-3 font-medium">Amount</th>
+                                                        <th class="pb-3 font-medium">Status</th>
+                                                        <th class="pb-3 font-medium">Invoice</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="border-b border-gray-800/50">
+                                                        <td class="py-4">Jan 15, 2024</td>
+                                                        <td class="py-4">Professional Plan</td>
+                                                        <td class="py-4 font-bold">$49.99</td>
+                                                        <td class="py-4">
+                                                            <span class="badge badge-success">Paid</span>
+                                                        </td>
+                                                        <td class="py-4">
+                                                            <button class="text-blue-400 hover:text-blue-300">
+                                                                <i class="fas fa-download"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="border-b border-gray-800/50">
+                                                        <td class="py-4">Dec 15, 2023</td>
+                                                        <td class="py-4">Professional Plan</td>
+                                                        <td class="py-4 font-bold">$49.99</td>
+                                                        <td class="py-4">
+                                                            <span class="badge badge-success">Paid</span>
+                                                        </td>
+                                                        <td class="py-4">
+                                                            <button class="text-blue-400 hover:text-blue-300">
+                                                                <i class="fas fa-download"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="py-4">Nov 15, 2023</td>
+                                                        <td class="py-4">Professional Plan</td>
+                                                        <td class="py-4 font-bold">$49.99</td>
+                                                        <td class="py-4">
+                                                            <span class="badge badge-success">Paid</span>
+                                                        </td>
+                                                        <td class="py-4">
+                                                            <button class="text-blue-400 hover:text-blue-300">
+                                                                <i class="fas fa-download"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Activity Tab -->
+                        <div id="activity-tab" class="tab-content hidden">
+                            <div class="glass rounded-2xl p-6 animate-fade-in">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-xl font-bold">Recent Activity</h3>
+                                    <button class="trading-btn trading-btn-secondary">
+                                        <i class="fas fa-filter mr-2"></i> Filter
+                                    </button>
+                                </div>
+                                
+                                <div class="space-y-6">
+                                    <!-- Timeline -->
+                                    <div class="timeline">
+                                        <div class="timeline-item">
+                                            <div class="bg-gray-900/30 rounded-xl p-4">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <div class="font-medium">Password Changed</div>
+                                                    <div class="text-sm text-gray-400">2 hours ago</div>
+                                                </div>
+                                                <div class="text-sm text-gray-300">
+                                                    Your account password was successfully updated.
+                                                </div>
+                                                <div class="text-xs text-gray-500 mt-2">
+                                                    <i class="fas fa-laptop mr-1"></i> Chrome on Windows • New York, USA
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="timeline-item">
+                                            <div class="bg-gray-900/30 rounded-xl p-4">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <div class="font-medium">Trade Executed</div>
+                                                    <div class="text-sm text-gray-400">5 hours ago</div>
+                                                </div>
+                                                <div class="text-sm text-gray-300">
+                                                    BTC/USDT Long position opened at $42,240.50
+                                                </div>
+                                                <div class="text-xs text-gray-500 mt-2">
+                                                    <i class="fas fa-chart-line mr-1"></i> Futures Trading
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="timeline-item">
+                                            <div class="bg-gray-900/30 rounded-xl p-4">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <div class="font-medium">API Key Added</div>
+                                                    <div class="text-sm text-gray-400">2 days ago</div>
+                                                </div>
+                                                <div class="text-sm text-gray-300">
+                                                    New Binance API key added with read-only permissions.
+                                                </div>
+                                                <div class="text-xs text-gray-500 mt-2">
+                                                    <i class="fas fa-key mr-1"></i> API Management
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="timeline-item">
+                                            <div class="bg-gray-900/30 rounded-xl p-4">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <div class="font-medium">Profile Updated</div>
+                                                    <div class="text-sm text-gray-400">1 week ago</div>
+                                                </div>
+                                                <div class="text-sm text-gray-300">
+                                                    Updated trading preferences and notification settings.
+                                                </div>
+                                                <div class="text-xs text-gray-500 mt-2">
+                                                    <i class="fas fa-user-edit mr-1"></i> Profile Settings
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="timeline-item">
+                                            <div class="bg-gray-900/30 rounded-xl p-4">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <div class="font-medium">Plan Upgraded</div>
+                                                    <div class="text-sm text-gray-400">2 weeks ago</div>
+                                                </div>
+                                                <div class="text-sm text-gray-300">
+                                                    Upgraded from Basic to Professional plan.
+                                                </div>
+                                                <div class="text-xs text-gray-500 mt-2">
+                                                    <i class="fas fa-crown mr-1"></i> Billing
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Load More -->
+                                    <div class="text-center">
+                                        <button class="trading-btn trading-btn-secondary">
+                                            <i class="fas fa-history mr-2"></i> Load More Activity
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Account Statistics -->
+                            <div class="glass rounded-2xl p-6 animate-fade-in" style="animation-delay: 0.1s">
+                                <h3 class="text-xl font-bold mb-6">Account Statistics</h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div class="stat-card text-center">
+                                        <div class="text-2xl font-bold">342</div>
+                                        <div class="text-sm text-gray-400">Total Logins</div>
+                                    </div>
+                                    <div class="stat-card text-center">
+                                        <div class="text-2xl font-bold">124</div>
+                                        <div class="text-sm text-gray-400">Trades Made</div>
+                                    </div>
+                                    <div class="stat-card text-center">
+                                        <div class="text-2xl font-bold">89</div>
+                                        <div class="text-sm text-gray-400">API Calls</div>
+                                    </div>
+                                    <div class="stat-card text-center">
+                                        <div class="text-2xl font-bold">15</div>
+                                        <div class="text-sm text-gray-400">Sessions</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Bottom Mobile Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 glass border-t border-gray-800 z-40 lg:hidden">
+        <div class="flex justify-around p-3">
+            <a href="dashboard.html" class="flex flex-col items-center text-gray-300">
+                <i class="fas fa-home text-lg mb-1"></i>
+                <span class="text-xs">Home</span>
+            </a>
+            <a href="balances.html" class="flex flex-col items-center text-gray-300">
+                <i class="fas fa-wallet text-lg mb-1"></i>
+                <span class="text-xs">Balance</span>
+            </a>
+            <a href="coins.html" class="flex flex-col items-center text-gray-300">
+                <i class="fas fa-coins text-lg mb-1"></i>
+                <span class="text-xs">Markets</span>
+            </a>
+            <a href="futures_chart.html" class="flex flex-col items-center text-gray-300">
+                <i class="fas fa-chart-candlestick text-lg mb-1"></i>
+                <span class="text-xs">Futures</span>
+            </a>
+            <a href="profile.html" class="flex flex-col items-center text-blue-400">
+                <i class="fas fa-user text-lg mb-1"></i>
+                <span class="text-xs">Profile</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // DOM Elements
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+        const sidebarContent = document.getElementById('sidebar-content');
+        const closeSidebar = document.getElementById('close-sidebar');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const editPersonalBtn = document.getElementById('edit-personal-btn');
+        const personalForm = document.getElementById('personal-form');
+        const personalFormActions = document.getElementById('personal-form-actions');
+        const cancelPersonalBtn = document.getElementById('cancel-personal-btn');
+        const changePasswordBtn = document.getElementById('change-password-btn');
+        const passwordForm = document.getElementById('password-form');
+        const cancelPasswordBtn = document.getElementById('cancel-password-btn');
+        const changeAvatarBtn = document.getElementById('change-avatar-btn');
+        const avatarInput = document.getElementById('avatar-input');
+        const profileAvatar = document.getElementById('profile-avatar');
+        const logoutBtn = document.getElementById('logout-btn');
+        const logoutAllBtn = document.getElementById('logout-all-btn');
+        const exportDataBtn = document.getElementById('export-data');
+        const twoFAToggle = document.getElementById('2fa-toggle');
+        const smsToggle = document.getElementById('sms-toggle');
+        
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            mobileSidebar.classList.toggle('hidden');
+            sidebarContent.classList.toggle('-translate-x-full');
+        }
+        
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', toggleMobileMenu);
+        }
+        
+        if (sidebarBackdrop) {
+            sidebarBackdrop.addEventListener('click', toggleMobileMenu);
+        }
+        
+        if (closeSidebar) {
+            closeSidebar.addEventListener('click', toggleMobileMenu);
+        }
+        
+        // Tab Switching
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Update active tab button
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Show corresponding tab content
+                tabContents.forEach(content => content.classList.add('hidden'));
+                document.getElementById(`${tabId}-tab`).classList.remove('hidden');
+            });
+        });
+        
+        // Edit Personal Info
+        if (editPersonalBtn) {
+            editPersonalBtn.addEventListener('click', () => {
+                const inputs = personalForm.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.readOnly = false;
+                    input.disabled = false;
+                    input.classList.remove('bg-gray-900/50');
+                    input.classList.add('bg-gray-800/50');
+                });
+                
+                personalFormActions.classList.remove('hidden');
+                editPersonalBtn.classList.add('hidden');
+            });
+        }
+        
+        // Cancel Personal Info Edit
+        if (cancelPersonalBtn) {
+            cancelPersonalBtn.addEventListener('click', () => {
+                const inputs = personalForm.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.readOnly = true;
+                    input.disabled = true;
+                    input.classList.remove('bg-gray-800/50');
+                    input.classList.add('bg-gray-900/50');
+                });
+                
+                personalFormActions.classList.add('hidden');
+                editPersonalBtn.classList.remove('hidden');
+                
+                // Reset form values
+                personalForm.reset();
+            });
+        }
+        
+        // Change Password
+        if (changePasswordBtn) {
+            changePasswordBtn.addEventListener('click', () => {
+                passwordForm.classList.toggle('hidden');
+            });
+        }
+        
+        // Cancel Password Change
+        if (cancelPasswordBtn) {
+            cancelPasswordBtn.addEventListener('click', () => {
+                passwordForm.classList.add('hidden');
+                passwordForm.reset();
+            });
+        }
+        
+        // Password Form Submission
+        if (passwordForm) {
+            passwordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalHTML = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> Updating';
+                submitBtn.disabled = true;
+                
+                // Simulate API call
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalHTML;
+                    submitBtn.disabled = false;
+                    passwordForm.classList.add('hidden');
+                    passwordForm.reset();
+                    
+                    showNotification('Password updated successfully', 'success');
+                }, 2000);
+            });
+        }
+        
+        // Avatar Upload
+        if (changeAvatarBtn) {
+            changeAvatarBtn.addEventListener('click', () => {
+                avatarInput.click();
+            });
+        }
+        
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        profileAvatar.src = event.target.result;
+                        showNotification('Profile picture updated successfully', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // Logout
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout?')) {
+                    // Simulate logout
+                    showNotification('Logging out...', 'info');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                }
+            });
+        }
+        
+        // Logout All Sessions
+        if (logoutAllBtn) {
+            logoutAllBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout from all devices? This will end all active sessions.')) {
+                    // Simulate logout all
+                    showNotification('Logging out from all devices...', 'info');
+                    setTimeout(() => {
+                        showNotification('All sessions terminated successfully', 'success');
+                    }, 2000);
+                }
+            });
+        }
+        
+        // Export Data
+        if (exportDataBtn) {
+            exportDataBtn.addEventListener('click', () => {
+                showNotification('Preparing data export...', 'info');
+                setTimeout(() => {
+                    showNotification('Data export ready for download', 'success');
+                }, 2000);
+            });
+        }
+        
+        // 2FA Toggle
+        if (twoFAToggle) {
+            twoFAToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    showNotification('Two-factor authentication enabled', 'success');
+                } else {
+                    if (confirm('Disabling 2FA reduces your account security. Are you sure?')) {
+                        showNotification('Two-factor authentication disabled', 'warning');
+                    } else {
+                        this.checked = true;
+                    }
+                }
+            });
+        }
+        
+        // SMS Toggle
+        if (smsToggle) {
+            smsToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    showNotification('SMS notifications enabled', 'success');
+                } else {
+                    showNotification('SMS notifications disabled', 'info');
+                }
+            });
+        }
+        
+        // Form Submissions
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitBtn = this.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    const originalHTML = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> Saving';
+                    submitBtn.disabled = true;
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalHTML;
+                        submitBtn.disabled = false;
+                        
+                        if (this.id !== 'personal-form' && this.id !== 'password-form') {
+                            showNotification('Settings saved successfully', 'success');
+                        }
+                    }, 1500);
+                }
+            });
+        });
+        
+        // Toggle Switch Handlers
+        document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const label = this.nextElementSibling;
+                if (this.checked) {
+                    label.style.backgroundColor = '#3b82f6';
+                } else {
+                    label.style.backgroundColor = '#374151';
+                }
+            });
+        });
+        
+        // Theme Buttons
+        document.querySelectorAll('.trading-btn-secondary').forEach(btn => {
+            if (btn.textContent.includes('Dark') || btn.textContent.includes('Light') || btn.textContent.includes('Auto')) {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all theme buttons
+                    document.querySelectorAll('.trading-btn-secondary').forEach(b => {
+                        if (b.textContent.includes('Dark') || b.textContent.includes('Light') || b.textContent.includes('Auto')) {
+                            b.classList.remove('active');
+                        }
+                    });
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const theme = this.textContent.trim();
+                    showNotification(`Theme changed to ${theme} mode`, 'success');
+                });
+            }
+        });
+        
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 right-4 glass-dark rounded-xl p-4 border-l-4 ${type === 'success' ? 'border-green-500' : type === 'error' ? 'border-red-500' : type === 'warning' ? 'border-yellow-500' : 'border-blue-500'} transform translate-x-full transition-transform duration-300 z-50 max-w-sm`;
+            notification.innerHTML = `
+                <div class="flex items-start">
+                    <div class="w-8 h-8 ${type === 'success' ? 'bg-green-500/20' : type === 'error' ? 'bg-red-500/20' : type === 'warning' ? 'bg-yellow-500/20' : 'bg-blue-500/20'} rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                        <i class="fas ${type === 'success' ? 'fa-check text-green-400' : type === 'error' ? 'fa-exclamation text-red-400' : type === 'warning' ? 'fa-exclamation-triangle text-yellow-400' : 'fa-info text-blue-400'}"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium">${type === 'success' ? 'Success' : type === 'error' ? 'Error' : type === 'warning' ? 'Warning' : 'Info'}</div>
+                        <div class="text-sm text-gray-300 mt-1">${message}</div>
+                    </div>
+                    <button class="ml-4 text-gray-400 hover:text-white" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click effects to buttons
+            document.querySelectorAll('.trading-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.style.transform = 'translateY(0)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+            
+            // Demo notification
+            setTimeout(() => {
+                showNotification('Welcome to your profile settings', 'info');
+            }, 1000);
+        });
+        
+        // Expose functions to global scope
+        window.showNotification = showNotification;
+    </script>
+</body>
+</html>
