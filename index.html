@@ -13,7 +13,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <!-- Custom Animation CSS -->
-  <style>
+ <style>
     :root {
         --primary: #3b82f6;
         --secondary: #10b981;
@@ -21,13 +21,13 @@
     }
 
     /* ================================================================== */
-    /* GLOBAL FIXES – ELIMINATE HORIZONTAL SCROLL & WHITE SPACE */
+    /* GLOBAL – NO HORIZONTAL SCROLL + FULL MOBILE SAFETY */
     /* ================================================================== */
     html, body {
         width: 100%;
         margin: 0;
         padding: 0;
-        overflow-x: hidden;           /* Critical: prevents any horizontal overflow */
+        overflow-x: hidden;
     }
 
     body {
@@ -43,50 +43,29 @@
         box-sizing: border-box;
     }
 
-    /* Force Tailwind container to respect viewport */
     .container {
         width: 100%;
         max-width: 100%;
         padding-left: 1rem;
         padding-right: 1rem;
-        margin-left: auto;
-        margin-right: auto;
+        margin: 0 auto;
     }
-
-    @media (min-width: 640px) {
-        .container { padding-left: 2rem; padding-right: 2rem; }
-    }
-    @media (min-width: 1024px) {
-        .container { max-width: 1280px; }
-    }
+    @media (min-width: 640px) { .container { padding-left: 2rem; padding-right: 2rem; } }
+    @media (min-width: 1024px) { .container { max-width: 1280px; } }
 
     /* ================================================================== */
-    /* 1. HERO SECTION – SAFE PADDING (never hidden under navbar) */
+    /* HERO PADDING */
     /* ================================================================== */
     section:first-of-type {
-        padding-top: 8rem; /* pt-32 */
+        padding-top: 8rem;
+        position: relative;
+        overflow: hidden; /* Ensures floating icons don't trigger scroll */
     }
-
-    @media (max-width: 768px) {
-        section:first-of-type {
-            padding-top: 150px !important;
-        }
-    }
-
-    @media (max-width: 480px) {
-        section:first-of-type {
-            padding-top: 170px !important;
-        }
-    }
-
-    @media (max-width: 540px) and (max-height: 720px) {
-        section:first-of-type {
-            padding-top: 160px !important;
-        }
-    }
+    @media (max-width: 768px)  { section:first-of-type { padding-top: 150px !important; } }
+    @media (max-width: 480px)  { section:first-of-type { padding-top: 170px !important; } }
 
     /* ================================================================== */
-    /* 2. SMALLER "START TRADING" BUTTON */
+    /* START TRADING BUTTON */
     /* ================================================================== */
     .btn-start-trading {
         padding: 0.75rem 1.5rem !important;
@@ -94,123 +73,142 @@
         font-weight: 600 !important;
         border-radius: 0.75rem !important;
     }
-
     @media (max-width: 640px) {
-        .btn-start-trading {
-            padding: 0.625rem 1.25rem !important;
-            font-size: 0.875rem !important;
-        }
+        .btn-start-trading { padding: 0.625rem 1.25rem !important; font-size: 0.875rem !important; }
     }
 
     /* ================================================================== */
-    /* ANIMATIONS (unchanged) */
+    /* ANIMATIONS – WIDER FLOATING ORBIT */
     /* ================================================================== */
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
+    @keyframes float-wide {
+        0%, 100%   { transform: translateY(0px)   translateX(0px); }
+        25%        { transform: translateY(-30px) translateX(15px); }
+        50%        { transform: translateY(-40px) translateX(0px); }
+        75%        { transform: translateY(-30px) translateX(-15px); }
     }
-    @keyframes shimmer {
-        0% { background-position: -1000px 0; }
-        100% { background-position: 1000px 0; }
-    }
+
     @keyframes pulse-glow {
         0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
-    }
-    @keyframes slideInRight {
-        from { transform: translateX(100px); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideInLeft {
-        from { transform: translateX(-100px); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
+        50%      { opacity: 0.7; }
     }
 
-    .animate-float { animation: float 6s ease-in-out infinite; }
-    .animate-shimmer { animation: shimmer 3s infinite linear; background: linear-gradient(90deg,rgba(255,255,255,0)0%,rgba(255,255,255,.1)50%,rgba(255,255,255,0)100%); background-size:1000px 100%; }
+    @keyframes slideInRight { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideInLeft  { from { transform: translateX(-100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    .animate-float-wide { animation: float-wide 10s ease-in-out infinite; }
     .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
     .animate-slide-in-right { animation: slideInRight 0.8s ease-out forwards; }
-    .animate-slide-in-left { animation: slideInLeft 0.8s ease-out forwards; }
+    .animate-slide-in-left  { animation: slideInLeft 0.8s ease-out forwards; }
 
     /* ================================================================== */
-    /* GLASS & UI STYLES */
+    /* GLASS & UI */
     /* ================================================================== */
     .glass {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255,255,255,0.05);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255,255,255,0.1);
         border-radius: 1rem;
     }
 
     .gradient-text {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background: linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
     }
 
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-    ::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.5); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(59,130,246,0.8); }
+    ::-webkit-scrollbar { width:8px; height:8px; }
+    ::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); }
+    ::-webkit-scrollbar-thumb { background:rgba(59,130,246,0.5); border-radius:4px; }
+    ::-webkit-scrollbar-thumb:hover { background:rgba(59,130,246,0.8); }
 
     /* ================================================================== */
-    /* WHATSAPP FLOAT BUTTON – NOW 100% SAFE (no overflow) */
+    /* FLOATING CRYPTO ICONS – MOVED DEEP INSIDE + WIDER ORBIT */
+    /* ================================================================== */
+    .floating-crypto {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 40;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        animation: float-wide 10s ease-in-out infinite;
+    }
+
+    /* Desktop – elegant positions well inside the card */
+    @media (min-width: 769px) {
+        .floating-crypto.bitcoin   { top: 10%;   left: 8%;   animation-delay: 0s; }
+        .floating-crypto.ethereum  { bottom: 12%; right: 10%; animation-delay: 2s; }
+        .floating-crypto.coins     { top: 55%;   right: 6%;  animation-delay: 4s; }
+    }
+
+    /* Tablet & Mobile – pulled safely inside, never cut */
+    @media (max-width: 768px) {
+        .floating-crypto {
+            width: 56px;
+            height: 56px;
+        }
+        .floating-crypto.bitcoin   { top: 8%;  left: 5%; }
+        .floating-crypto.ethereum  { bottom: 10%; right: 5%; }
+        .floating-crypto.coins     { top: 45%; right: 4%; }
+    }
+
+    @media (max-width: 480px) {
+        .floating-crypto {
+            width: 50px;
+            height: 50px;
+        }
+        .floating-crypto.bitcoin   { top: 6%;  left: 4%; }
+        .floating-crypto.ethereum  { bottom: 8%; right: 4%; }
+        .floating-crypto.coins     { top: 42%; right: 3%; }
+    }
+
+    /* ================================================================== */
+    /* WHATSAPP BUTTON – Always on top */
     /* ================================================================== */
     .whatsapp-float {
         position: fixed;
         width: 60px;
         height: 60px;
         bottom: 20px;
-        right: 16px;                    /* Pulled in safely */
+        right: 16px;
         background-color: #25d366;
         color: white;
         border-radius: 50px;
-        text-align: center;
         font-size: 32px;
-        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-        z-index: 1000;
+        box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+        z-index: 50;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.3s ease;
         animation: pulse-glow 2s infinite;
-        pointer-events: auto;
     }
-
     .whatsapp-float:hover {
         transform: scale(1.1);
         background-color: #20c05a;
-        box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
     }
-
     @media (max-width: 480px) {
-        .whatsapp-float {
-            width: 54px;
-            height: 54px;
-            font-size: 28px;
-            bottom: 16px;
-            right: 12px;
-        }
+        .whatsapp-float { width: 54px; height: 54px; font-size: 28px; bottom: 16px; right: 12px; }
     }
 
     /* ================================================================== */
-    /* FOLDABLE OPTIMIZATIONS */
+    /* FINAL SAFETY */
     /* ================================================================== */
     @media (max-width:540px) and (max-height:720px) {
         .foldable-optimized { padding-top:1rem !important; padding-bottom:1rem !important; }
         .foldable-text { font-size:0.9rem !important; }
     }
 
-    /* ================================================================== */
-    /* FINAL SAFETY NET – PREVENT ANY ELEMENT FROM BREAKING LAYOUT */
-    /* ================================================================== */
-    img, svg, video, canvas, iframe, 
-    .glass, .container, section, nav, header, footer, div {
-        max-width: 100% !important;
-        overflow: hidden;
-    }
+    img, svg, .glass, section, div { max-width: 100% !important; overflow: hidden; }
 </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950 overflow-x-hidden">
@@ -390,15 +388,16 @@
                     </div>
                     
                     <!-- Animated crypto coins floating around -->
-                    <div class="absolute -top-6 -left-6 w-12 h-12 glass rounded-full flex items-center justify-center animate-float">
-                        <i class="fab fa-bitcoin text-yellow-500 text-xl"></i>
-                    </div>
-                    <div class="absolute -bottom-6 -right-6 w-12 h-12 glass rounded-full flex items-center justify-center animate-float" style="animation-delay: 1s">
-                        <i class="fab fa-ethereum text-purple-500 text-xl"></i>
-                    </div>
-                    <div class="absolute top-1/2 -right-8 w-10 h-10 glass rounded-full flex items-center justify-center animate-float" style="animation-delay: 2s">
-                        <i class="fas fa-coins text-orange-500"></i>
-                    </div>
+                    <!-- Replace your three floating divs with these -->
+<div class="floating-crypto bitcoin glass animate-float-wide">
+    <i class="fab fa-bitcoin text-yellow-500 text-3xl"></i>
+</div>
+<div class="floating-crypto ethereum glass animate-float-wide">
+    <i class="fab fa-ethereum text-purple-500 text-3xl"></i>
+</div>
+<div class="floating-crypto coins glass animate-float-wide">
+    <i class="fas fa-coins text-orange-500 text-3xl"></i>
+</div>
                 </div>
             </div>
         </div>
