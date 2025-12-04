@@ -566,6 +566,55 @@
             </div>
         </div>
     </section>
+    <!-- Floating WhatsApp Button -->
+<a href="https://wa.me/254769525570" target="_blank" class="whatsapp-float">
+    <i class="fab fa-whatsapp"></i>
+</a>
+<style>
+    /* WhatsApp Floating Button CSS */
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 32px;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    animation: pulse-glow 2s infinite;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    background-color: #20c05a;
+    box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+}
+
+/* Responsive for small screens */
+@media (max-width: 480px) {
+    .whatsapp-float {
+        width: 55px;
+        height: 55px;
+        font-size: 28px;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* Re-use your existing pulse animation (already in your CSS) */
+@keyframes pulse-glow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+</style>
     
     <!-- Footer -->
     <footer class="py-12 px-4 md:px-8 bg-gray-900/50">
@@ -625,14 +674,14 @@
                     <h3 class="text-lg font-bold mb-6">Contact Us</h3>
                     <ul class="space-y-3">
                         <li class="text-gray-400"><i class="fas fa-envelope mr-2"></i> support@cryptofuturespro.com</li>
-                        <li class="text-gray-400"><i class="fas fa-phone mr-2"></i> +1 (555) 123-4567</li>
+                        <li class="text-gray-400"><i class="fas fa-phone mr-2"></i> +254769525570</li>
                         <li class="text-gray-400"><i class="fas fa-map-marker-alt mr-2"></i> Singapore, SG</li>
                     </ul>
                 </div>
             </div>
             
             <div class="pt-8 border-t border-gray-800 text-center text-gray-500">
-                <p>&copy; 2023 CryptoFuturesPro. All rights reserved. Cryptocurrency trading involves significant risk.</p>
+                <p>&copy; 2025 CryptoFuturesPro. All rights reserved. Cryptocurrency trading involves significant risk.</p>
             </div>
         </div>
     </footer>
